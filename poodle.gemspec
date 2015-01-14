@@ -5,13 +5,13 @@ require "poodle/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "poodle"
+  s.name        = "poodle-rb"
   s.version     = Poodle::VERSION
   s.authors     = ["Krishnaprasad Varma"]
   s.email       = ["krshnaprsad@gmail.com"]
   s.homepage    = "http://kpvarma.com"
-  s.summary     = "Poodle is a Q-Apps client engine"
-  s.description = "Poodle can be mounted into a Q-App so that poodle will deal with all q-apps services like authentication and UI"
+  s.summary     = "Poodle is Rails Starter Kit"
+  s.description = "Poodle is a started kit for creating Rails Application. Poodle comes with built in UI (layout, css/JS) and some helpers which boost the creation of any prototype application"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]

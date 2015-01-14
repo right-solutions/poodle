@@ -1,0 +1,45 @@
+<h3 class="text-center">Poodle</h3>
+<!-- <img src="http://www.domain.com/images/logo.png"/> -->
+<div class="cl-30"></div>
+
+<ul>
+
+  <li class="<%= nav_class("user/dashboard") %>">
+    <%= link_to raw("<i class=\"fa fa-dashboard\"></i> Dashboard"), "#" %>
+  </li>
+
+  <% if @current_user.is_admin? %>
+
+    <li class="heading">Admin</li>
+
+    <li class="<%= nav_class("admin/1") %>">
+      <%= link_to raw("<i class=\"fa fa-globe\"></i> Manage Admin 1"), "#" %>
+    </li>
+
+    <li class="<%= nav_class("admin/2") %>">
+      <%= link_to raw("<i class=\"fa fa-rub\"></i> Manage Admin 2"), "#" %>
+    </li>
+
+  <% end %>
+
+  <% if @current_user.is_super_admin? %>
+
+    <li class="heading">System Configuration</li>
+
+    <li class="<%= nav_class("super_admin/1") %>">
+      <%= link_to raw("<i class=\"fa fa-link\"></i> Configure 3"), "#" %>
+    </li>
+
+  <% end %>
+
+  <li class="heading">Account</li>
+
+  <li class="<%= nav_class("account/profile") %>">
+    <%= link_to raw("<i class=\"fa fa-user\"></i> My Profile"), "#" %>
+  </li>
+
+  <li>
+    <%= link_to raw("<i class=\"fa fa-power-off\"></i> Sign Out"), "#" %>
+  </li>
+</ul>
+

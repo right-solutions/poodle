@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <title><%= title -%></title>
+    <%= render :partial=>"/layouts/poodle/common/meta_tags" -%>
+    <link rel="icon" href="/assets/favicon.ico" type="image/png">
+    <%= stylesheet_link_tag "poodle/application", :media => "all" -%>
+    <%= csrf_meta_tags -%>
+    <%= yield :javascript_header -%>
+  </head>
+<body>
+
+  <div>
+
+    <div class="container-fluid with_sidebar header-block clearfix">
+
+      <%#* Display Sidebar -%>
+      <div class="sidebar">
+        <%= render :partial=>"/layouts/poodle/application/sidebar" -%>
+      </div>
+
+      <div class="main-content">
+        <div id="div_page_header">
+          <%= render :partial=>"/layouts/poodle/application/header" -%>
+        </div>
+
+        <%#* Show flash messages if controller has set any. -%>
+        <div id="div_flash_message" class="container-fluid" >
+          <%= render :partial=>"/layouts/poodle/common/flash_message" -%>
+        </div>
+
+        <%#* Page Content Starts here -%>
+        <div class="pt-10" style="min-height:400px;">
+          <%= yield %>
+        </div>
+
+        <%#* Display Footer -%>
+        <%= render :partial=>"/layouts/poodle/application/footer" -%>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <%#* Display Hidden Overlays -%>
+  <%= render :partial=>"/layouts/poodle/common/overlays" -%>
+
+  <%#* Loading Javascripts -%>
+  <%= javascript_include_tag "poodle/application" -%>
+
+  <%= yield :javascript_footer -%>
+
+</body>
+
+</html>

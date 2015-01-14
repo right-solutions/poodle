@@ -17,9 +17,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 4.1.5"
-  s.add_dependency "handy-css-rails", "~> 0.0.7"
-  #s.add_dependency "humdrum", "~> 0.0.7"
-  s.add_dependency "jquery-validation-rails"
+  s.add_dependency "rails", "~> 4.1", ">= 4.1.5"
+  s.add_dependency "handy-css-rails", "~> 0.0", ">= 0.0.7"
+  s.add_dependency "jquery-validation-rails", "~> 1.12", ">= 1.12.0"
 
 end

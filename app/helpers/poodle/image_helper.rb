@@ -1,10 +1,5 @@
 module Poodle
   module ImageHelper
-
-    DEFAULT_PLACE_HOLDER_HEIGHT = 60
-    DEFAULT_PLACE_HOLDER_WIDTH = 100
-    DEFAULT_PLACE_HOLDER_TEXT = "<No Image>"
-
     # This method only works with carrier wave way of doing.
     # eg: user.profile_picture.image.large.url
     # Usage:
@@ -45,56 +40,6 @@ module Poodle
       hsh[:class] = "" unless hsh[:class]
       img_url = image_url(object, eval_url, ph)
       return image_tag img_url, class: hsh[:class], style: "width:#{hsh[:width]};height:#{hsh[:height]};#{hsh[:style]}"
-    end
-
-    def display_user_image(user, hsh)
-      hsh[:width] = "100%" unless hsh[:width]
-      hsh[:height] = "auto" unless hsh[:height]
-
-      ph = hsh.has_key?(:place_holder) ? hsh[:place_holder] : {}
-      ph[:width] = ph.has_key?(:width) ? ph[:width] : DEFAULT_PLACE_HOLDER_WIDTH
-      ph[:height] = ph.has_key?(:height) ? ph[:height] : DEFAULT_PLACE_HOLDER_HEIGHT
-      ph[:text] = ph.has_key?(:text) ? ph[:text] : DEFAULT_PLACE_HOLDER_TEXT
-      hsh[:place_holder] = ph
-
-      hsh[:style] = "" unless hsh[:style]
-      hsh[:class] = "" unless hsh[:class]
-      hsh[:size] = "thumb" unless hsh[:size]
-      hsh[:url_domain] = "http://localhost:3000" unless hsh[:url_domain]
-
-      if user.send("#{hsh[:size]}_url").blank?
-        url = "http://placehold.it/#{ph[:width]}x#{ph[:height]}&text=#{ph[:text]}"
-      else
-        url = hsh[:url_domain] + user.send("#{hsh[:size]}_url")
-      end
-
-      return image_tag url, class: hsh[:class], style: "width:#{hsh[:width]};height:#{hsh[:height]};#{hsh[:style]}"
-    end
-
-    ## Returns new photo url or edit existing photo url based on
-    #  object is associated with photo or not
-    # == Examples
-    #   >>> upload_image_link(@user, admin_user_path(@user), :profile_picture)
-    #   => "/admin/images/new" OR
-    #   => "/admin/images/1/edit"
-    def upload_image_link(object, redirect_url, assoc_name=:photo)
-
-      photo_object = nil
-      photo_object =  object.send(assoc_name) if object.respond_to?(assoc_name)
-      #binding.pry
-      if photo_object.present?
-        edit_admin_image_path(photo_object,
-                                   :redirect_url => redirect_url,
-                                   :imageable_id => object.id,
-                                   :imageable_type => object.class.to_s,
-                                   :image_type => photo_object.class.name)
-      else
-        photo_object = object.send("build_#{assoc_name}")
-        new_admin_image_path(:redirect_url => redirect_url,
-                                   :imageable_id => object.id,
-                                   :imageable_type => object.class.to_s,
-                                   :image_type => photo_object.class.name)
-      end
     end
   end
 end

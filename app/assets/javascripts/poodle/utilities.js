@@ -48,3 +48,13 @@ function closeModal(modalId){
   }
   $('#' + modalId).modal('hide');
 }
+
+function initPopovers(){
+  $('[data-toggle="popover"]').popover()
+}
+initPopovers();
+
+function initTooltip(){
+  $('[data-toggle="tooltip"]').tooltip()
+}
+initTooltip();

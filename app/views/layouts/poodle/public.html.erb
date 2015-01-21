@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
   <head>
     <title><%= title -%></title>
-    <%= render :partial=>"/layouts/poodle/common/meta_tags" -%>
+    <%= meta_tags %>
     <link rel="icon" href="/assets/favicon.ico" type="image/png">
     <%= stylesheet_link_tag "poodle/application", :media => "all" -%>
     <%= csrf_meta_tags -%>
@@ -19,8 +19,8 @@
       </div>
 
       <%#* Show flash messages if controller has set any. -%>
-      <div id="div_flash_message" class="container-fluid" >
-        <%= render :partial=>"/layouts/poodle/common/flash_message" -%>
+      <div id="div_flash_message">
+        <%= flash_message() -%>
       </div>
 
       <%#* Page Content Starts here -%>
@@ -39,7 +39,7 @@
   <%= render :partial=>"/layouts/poodle/common/overlays" -%>
 
   <%#* Loading Javascripts -%>
-  <%= javascript_include_tag "poodle/application" -%>
+  <%= javascript_include_tag "application" -%>
 
   <%= yield :javascript_footer -%>
 

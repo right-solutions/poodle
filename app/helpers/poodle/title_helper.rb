@@ -1,6 +1,5 @@
 module Poodle
   module TitleHelper
-
     def set_heading(heading)
       @heading = heading
     end

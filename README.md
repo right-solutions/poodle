@@ -1,8 +1,9 @@
 = Poodle
 
-Poodle is a mountable rails engine which can be used to build a Q-App.
-It has built in layouts which uses the standard Q-App HTMLs (Look and feel)
-It also has modules to handle different APIs (Q-Auth-Client) for example
+Poodle is a mountable rails engine which gives you a handfull of action view helpers to render customised twitter bootstrap htmls.
+It has built in layouts which uses the standard twitter bootstrap Look and feel.
+It has also custom application helpers which is automatically loaded to the application using the poodle engine.
+
 
 = Why name Poodle ?
 

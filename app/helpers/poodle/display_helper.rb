@@ -1,7 +1,9 @@
 module Poodle
   module DisplayHelper
-
-    def scrap_word(text, char_count_limit, more_text = nil, more_link = nil,style='')
+    # Example
+    #   scrap_word(long_text, 120)
+    #   scrap_word(long_text, 120, "Read More", read_more_url)
+    def scrap_word(text, char_count_limit, more_text = nil, more_link = nil, style='')
       # remove HTML tags
       text = text.to_s.gsub(/<\/?[^>]*>/, " ")
       # remove additional spaces
@@ -28,9 +30,8 @@ module Poodle
       return teaser
     end
 
-    def display_time(disp_time, class_name = nil)
-      return distance_of_time_in_words_to_now(disp_time) + " ago"
+    def display_time(time)
+      distance_of_time_in_words_to_now(time) + (time > Time.now ? " from now" : " ago")
     end
-
   end
 end

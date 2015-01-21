@@ -1,6 +1,5 @@
 module Poodle
   module UrlHelper
-
     def add_query_params(url, params)
       parsed_uri = URI(url)
 

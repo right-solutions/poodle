@@ -1,6 +1,5 @@
 module Poodle
   module NavigationHelper
-
     def nav_active?(name)
       @nav == name
     end

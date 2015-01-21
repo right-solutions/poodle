@@ -1,6 +1,5 @@
 module Poodle
   module ParamsParserHelper
-
     def parse_pagination_params
       @current_page = params[:page] || "1"
       @per_page = params[:per_page] || Poodle.configuration.items_per_list.to_s

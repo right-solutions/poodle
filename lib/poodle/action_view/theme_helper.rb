@@ -249,34 +249,6 @@ module Poodle
       end
 
       # Example
-      #   theme_image(@project, admin_project_path(@project), :url, "logo.image.url")
-      # is equivalent to:
-      # ---------------------------
-      # <% change_picture_url = upload_image_link(@project, admin_project_path(@project), :logo) %>
-      # <% img_tag = display_image(@project, "logo.image.url", width: "100%", place_holder: {width: 300, height: 180, text: "<No Image>"}) %>
-      # <%= link_to img_tag, change_picture_url, :remote => true %>
-      # <%= link_to raw("<i class=\"fa fa-photo mr-5\"></i> Change Picture"), change_picture_url, :class=>"btn btn-default btn-xs mt-10", :remote=>true %>
-      def theme_image(object, url, assoc_name, assoc_url, options={})
-        options.reverse_merge!(
-          width: "100%",
-          ph: {
-            width: 300,
-            height: 180,
-            text: "<No Image>"
-          },
-          remote: true,
-          text: "Change Image",
-          icon: "photo",
-          classes: "btn btn-default btn-xs mt-10"
-        )
-        change_picture_url = upload_image_link(object, url, assoc_name)
-        img_tag = display_image(object, assoc_url, width: options[:width], place_holder: options[:ph])
-        btn_display = raw(theme_fa_icon(options[:icon])+theme_button_text(options[:text]))
-        link_to(img_tag, change_picture_url, :remote => options[:remote]) +
-        link_to(btn_display, change_picture_url, :class=>options[:classes], :remote=>options[:remote])
-      end
-
-      # Example
       #   theme_panel_heading(@project.name)
       # is equivalent to:
       # ---------------------------
@@ -303,6 +275,33 @@ module Poodle
       # <div class="fs-14 mt-10"><%= @project.description %></div>
       def theme_panel_description(text, classes="fs-14")
         content_tag(:div, text, class: classes)
+      end
+
+      # Example
+      #   theme_image(@project, admin_project_path(@project), :url, "logo.image.url", change_picture_url: change_picture_url)
+      # is equivalent to:
+      # ---------------------------
+      # <% img_tag = display_image(@project, "logo.image.url", width: "100%", place_holder: {width: 300, height: 180, text: "<No Image>"}) %>
+      # <%= link_to img_tag, change_picture_url, :remote => true %>
+      # <%= link_to raw("<i class=\"fa fa-photo mr-5\"></i> Change Picture"), change_picture_url, :class=>"btn btn-default btn-xs mt-10", :remote=>true %>
+      def theme_image(object, url, assoc_name, assoc_url, **options)
+        options.reverse_merge!(
+          width: "100%",
+          ph: {
+            width: 300,
+            height: 180,
+            text: "<No Image>"
+          },
+          remote: true,
+          text: "Change Image",
+          icon: "photo",
+          classes: "btn btn-default btn-xs mt-10",
+          change_picture_url: nil
+        )
+        img_tag = display_image(object, assoc_url, width: options[:width], place_holder: options[:ph])
+        btn_display = raw(theme_fa_icon(options[:icon])+theme_button_text(options[:text]))
+        link_to(img_tag, options[:change_picture_url], :remote => options[:remote]) +
+        link_to(btn_display, options[:change_picture_url], :class=>options[:classes], :remote=>options[:remote])
       end
 
       # Example

@@ -20,5 +20,4 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.1", ">= 4.1.5"
   s.add_dependency "handy-css-rails", "~> 0.0", ">= 0.0.7"
   s.add_dependency "jquery-validation-rails", "~> 1.12", ">= 1.12.0"
-
 end

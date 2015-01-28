@@ -100,13 +100,20 @@ module Poodle
           object_name: object.class.name.underscore,
           label: field_name.to_s.gsub("_", " ").titleize,
           required: true,
-          error_class: "has-errors",
+          error_class: "has-error",
           html_options: {}
         )
         options.reverse_merge!(
           param_name: "#{options[:object_name]}[#{field_name}]"
         )
-        error_class = object.errors[field_name.to_s].any? ? options[:error_class] : ""
+
+        if object.errors[field_name.to_s].any?
+          error_class =  options[:error_class]
+          error_message = content_tag(:span, object.errors[field_name].first, class: "help-block")
+        else
+          error_class = ""
+          error_message = ""
+        end
 
         theme_form_group(options[:label], required: options[:required], error_class: error_class) do
           options[:html_options].reverse_merge!(
@@ -126,7 +133,7 @@ module Poodle
           when :checkbox
             options[:html_options][:class] = "checkbox mt-10"
             check_box_tag(options[:param_name], field_name, object.send(field_name.to_s), **options[:html_options])
-          end
+          end + error_message
         end
 
       end
@@ -165,17 +172,34 @@ module Poodle
           label: foreign_key.to_s.titleize,
           prompt: true,
           editable: true,
-          error_class: "has-errors"
+          error_class: "has-error"
         )
 
-        error_class = object.errors[foreign_key.to_s].any? ? options[:error_class] : ""
+        # Populating Errors
+        errors = object.errors[foreign_key.to_s]
+        # if foreign_key is an id, check errors for the association
+        # errors = project.errors[:client_id] + project.errors[:client]
+        if object.errors[foreign_key.to_s.gsub("_id", "")]
+          errors += object.errors[foreign_key.to_s.gsub("_id", "")]
+        end
 
-        theme_form_group(options[:label], required: options[:required], error_class: options[:error_class]) do
+        error_class = errors.any? ? options[:error_class] : ""
+        if errors.any?
+          error_class =  options[:error_class]
+          error_message = content_tag(:span, errors.first, class: "help-block")
+        else
+          error_class = ""
+          error_message = ""
+        end
+
+        selected_id = object.send(foreign_key)
+
+        theme_form_group(options[:label], required: options[:required], error_class: error_class) do
           if !options[:editable] && options[:assoc_object]
             raw(options[:assoc_object].send(options[:assoc_display_method]) + hidden_field_tag("#{options[:param_name]}[#{foreign_key}]", options[:assoc_object].id))
           else
-            collection_select(options[:object_name], foreign_key, options[:assoc_collection], :id, options[:assoc_display_method], {:prompt=>options[:prompt]}, {:class => 'form-control'})
-          end
+            collection_select(options[:object_name], foreign_key, options[:assoc_collection], :id, options[:assoc_display_method], {prompt: options[:prompt], selected: selected_id}, {:class => 'form-control'})
+          end + error_message
         end
 
       end
@@ -200,12 +224,20 @@ module Poodle
           label: "Label",
           param_name: "Param",
           prompt: true,
-          error_class: "has-errors",
+          error_class: "has-error",
           required: false
         )
         error_class = object.errors[field_name.to_s].any? ? options[:error_class] : ""
-        theme_form_group(options[:label], required: options[:required], error_class: options[:error_class]) do
-          form.select(options[:param_name], options_for_select(options_list, :selected => form.object.name), {:prompt=>options[:prompt]}, {:class => 'form-control'})
+        if object.errors[field_name.to_s].any?
+          error_class =  options[:error_class]
+          error_message = content_tag(:span, object.errors[field_name].first, class: "help-block")
+        else
+          error_class = ""
+          error_message = ""
+        end
+
+        theme_form_group(options[:label], required: options[:required], error_class: error_class) do
+          form.select(options[:param_name], options_for_select(options_list, :selected => form.object.name), {:prompt=>options[:prompt]}, {:class => 'form-control'}) + error_message
         end
       end
 
@@ -215,9 +247,9 @@ module Poodle
       # is equivalent to:
       # ---------------------------
       # submit_tag button_text, "data-reset-text"=>button_text, "data-loading-text"=>"Saving ...", :class=>"btn btn-primary ml-10"
-      def theme_form_button(object, button_text="", saving_message="Saving ...")
+      def theme_form_button(object, button_text="", saving_message="Saving ...", classes="btn btn-primary ml-10")
         button_text = "#{object.new_record? ? "Create" : "Update"}" if button_text.blank?
-        submit_tag(button_text, "data-reset-text"=>button_text, "data-loading-text"=>saving_message, :class=>"btn btn-primary ml-10")
+        submit_tag(button_text, "data-reset-text"=>button_text, "data-loading-text"=>saving_message, :class=>classes)
       end
     end
   end

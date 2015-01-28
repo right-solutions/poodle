@@ -125,7 +125,7 @@ module Poodle
       end
 
       def clear_tag(height)
-        content_tag(:div, "", class: "cl-#{height}")
+        content_tag(:div, "", class: "clearfix cl-#{height}")
       end
 
       # Example
@@ -170,8 +170,8 @@ module Poodle
       # is equivalent to:
       # ---------------------------
       #  <h3 class="panel-title">Team Members</h3>
-      def theme_panel_title(title)
-        content_tag(:h3, title, class: "panel-title")
+      def theme_panel_title(title, classes="")
+        content_tag(:h3, title, class: "panel-title #{classes}")
       end
 
       # Example
@@ -205,12 +205,22 @@ module Poodle
         content_tag(:div, description, class: classes)
       end
 
-      def theme_detail_box(collection)
+      def theme_detail_box(collection, **options)
+        options.reverse_merge!(
+          show_partial: "show",
+          new_partial: "form",
+          edit_partial: "form",
+          index_partial: "show",
+        )
         case params[:action]
         when "show"
-          render partial: params[:action]
+          render partial: options[:show_partial]
+        when "new"
+          render partial: options[:new_partial]
+        when "edit"
+          render partial: options[:edit_partial]
         when "index"
-          collection.empty? ? (theme_panel_message(I18n.translate("forms.no_results_found"))) : render(partial: "show")
+          collection.empty? ? (theme_panel_message(I18n.translate("forms.no_results_found"))) : render(partial: options[:index_partial])
         else
           theme_panel_message(I18n.translate("forms.no_results_found"))
         end

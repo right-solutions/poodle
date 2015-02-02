@@ -17,7 +17,6 @@ module Poodle
         include Poodle::ParamsParserHelper
         include Poodle::TitleHelper
         include Poodle::UrlHelper
-        include Poodle::AdminFunctionalitiesHelper
         helper Poodle::DisplayHelper
         helper Poodle::FlashHelper
         helper Poodle::ImageHelper

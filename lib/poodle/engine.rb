@@ -25,7 +25,6 @@ module Poodle
         helper Poodle::ParamsParserHelper
         helper Poodle::TitleHelper
         helper Poodle::UrlHelper
-        helper Poodle::AdminFunctionalitiesHelper
       end
     end
   end

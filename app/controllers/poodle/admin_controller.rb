@@ -1,4 +1,4 @@
-class Poodle::AdminController < ApplicationController
+class Poodle::AdminController < PoodleController
 
   layout 'poodle/application'
 

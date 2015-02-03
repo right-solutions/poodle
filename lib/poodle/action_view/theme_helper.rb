@@ -114,7 +114,7 @@ module Poodle
             li_array = []
             collection.each do |item|
               li_array << content_tag(:li) do
-                link_to item.send(method_name), url_for([:admin, item]), :remote => true
+                link_to item.send(method_name), main_app.url_for([:admin, item]), :remote => true
               end
             end
             raw(li_array.join(" ")) +

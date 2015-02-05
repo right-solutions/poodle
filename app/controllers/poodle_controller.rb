@@ -1,2 +1,0 @@
-class PoodleController < ApplicationController
-end

@@ -3,11 +3,13 @@ module Poodle
     isolate_namespace Poodle
 
     initializer "poodle.configure_rails_initialization" do |app|
+
       ActiveSupport.on_load :action_view do
         include Poodle::ActionView::FormHelper
         include Poodle::ActionView::ModalHelper
         include Poodle::ActionView::ThemeHelper
       end
+
       ActiveSupport.on_load :action_controller do
         include Poodle::DisplayHelper
         include Poodle::FlashHelper

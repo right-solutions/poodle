@@ -146,5 +146,11 @@ module Poodle
       end
     end
 
+    def render_show
+      respond_to do |format|
+        format.js { render action: :show }
+      end
+    end
+
   end
 end

@@ -1,6 +1,14 @@
 module Poodle
   class Engine < ::Rails::Engine
+
     isolate_namespace Poodle
+
+    config.generators do |g|
+      g.test_framework      :rspec,        :fixture => false
+      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+      g.assets false
+      g.helper false
+    end
 
     initializer "poodle.configure_rails_initialization" do |app|
 
@@ -28,6 +36,7 @@ module Poodle
         helper Poodle::TitleHelper
         helper Poodle::UrlHelper
       end
+
     end
   end
 end

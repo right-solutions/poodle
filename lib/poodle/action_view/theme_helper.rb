@@ -3,11 +3,12 @@ module Poodle
     # This module creates Bootstrap wrappers around basic View Tags
     module ThemeHelper
       # theme_fa_icon('plus')
-      # <i class='fa fa-plus mr-10'></i>
+      # <i class='fa fa-plus'></i>
       # theme_fa_icon('plus', 'lg')
-      # <i class='fa fa-plus fa-lg mr-10'></i>
+      # <i class='fa fa-plus fa-lg'></i>
       def theme_fa_icon(icon_text, size="")
-        "<i class='fa fa-#{icon_text} #{size.blank? ? "" : "fa-"+size}'></i>"
+        size_class = %w{lg 2x 3x 4x 5x}.include?(size.strip) ? " fa-#{size.strip}" : ""
+        "<i class='fa fa-#{icon_text}#{size_class}'></i>"
       end
 
       # theme_button_text('New Project')
@@ -124,8 +125,9 @@ module Poodle
         end
       end
 
-      def clear_tag(height)
-        content_tag(:div, "", class: "clearfix cl-#{height}")
+      def clear_tag(height=nil)
+        height_class = height ? " cl-#{height}" : ""
+        content_tag(:div, "", class: "clearfix#{height_class}")
       end
 
       # Example
@@ -226,13 +228,6 @@ module Poodle
         end
       end
 
-      #<% if request.xhr? %>
-      #  <%= render :partial=>"layouts/poodle/common/flash_message" %>
-      #<% end %>
-      def theme_flash_message
-        render :partial=>"layouts/poodle/common/flash_message" if request.xhr?
-      end
-
       # Example
       #   theme_more_widget(object, data_columns=[:id, :created_at, :updated_at], super_admin = true)
       # is equivalent to:
@@ -315,37 +310,46 @@ module Poodle
       end
 
       # Example
-      #   theme_user_image(@user, @role)
+      #   place_holder(width: 60, height: 40, text: "Not Found")
       # is equivalent to:
-      def theme_user_image(user, **options)
+      # "http://placehold.it/60x40&text=Not Found"
+      def palceholdit(**options)
+        options.reverse_merge!( width: 60, height:  60, text: "<No Image>" )
+        "http://placehold.it/#{options[:width]}x#{options[:height]}&text=#{options[:text]}"
+      end
 
-        url_domain = defined?(QAuthRubyClient) ? QAuthRubyClient.configuration.q_auth_url : "http://localhost:3000"
+      # Example
+      #   theme_user_image(@user)
+      # is equivalent to:
+      def theme_user_image(user, method_name, **options)
+
+        url_domain = defined?(QAuthRubyClient) ? QAuthRubyClient.configuration.q_auth_url : "http://localhost:9001"
 
         options.reverse_merge!(
-          role: nil,
           width: 60,
           height: options[:width],
-          popover: true,
-          size: "thumb",
           url_domain: url_domain,
           place_holder: { width: options[:width], height: options[:height], text: "<No Image>" },
-          html_options: {
-            class: "",
-            style: "width:100%;height:auto;cursor:pointer;"
-          }
+          html_options: { class: "", style: "width:100%;height:auto;cursor:pointer;" }
+        )
+
+        options[:place_holder].reverse_merge!(
+          width: options[:width],
+          height: options[:height],
+          text: "<No Image>"
         )
 
         options[:html_options].reverse_merge!(
           "data-toggle" => "popover",
           "data-placement" => "bottom",
-          title: user.name,
-          "data-content" => (options[:role] ? options[:role].name : "")
+          "title" => user.name,
+          "data-content" => options[:popover] === true ? "" : options[:popover].to_s
         ) if options[:popover]
 
-        if user.send("#{options[:size]}_url").blank?
-          url = "http://placehold.it/#{options[:place_holder][:width]}x#{options[:place_holder][:height]}&text=#{options[:place_holder][:text]}"
-        else
-          url = options[:url_domain] + user.send("#{options[:size]}_url")
+        begin
+          url = options[:url_domain] + user.send(:eval, method_name)
+        rescue
+          url = palceholdit()
         end
 
         content_tag(:div) do

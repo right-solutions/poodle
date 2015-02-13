@@ -25,13 +25,13 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.1", ">= 4.1.5"
 
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'carrierwave'
-  s.add_development_dependency 'rmagick'
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'capybara'
-  s.add_development_dependency 'factory_girl_rails'
-  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'pry', "~> 0.10.1", ">= 0.10.0"
+  s.add_development_dependency 'sqlite3', "~> 1.3.10", ">= 1.3.9"
+  s.add_development_dependency 'carrierwave', "~> 0.10.0", ">= 0.9.0"
+  s.add_development_dependency 'rmagick', "~> 2.13.3", ">= 2.13.2"
+  s.add_development_dependency 'rspec-rails', "~> 3.2.0", ">= 3.1.0"
+  s.add_development_dependency 'capybara', "~> 2.4.4", ">= 2.4.3"
+  s.add_development_dependency 'factory_girl_rails', "~> 4.5.0", ">= 4.4.0"
+  s.add_development_dependency 'database_cleaner', "~> 1.4.0", ">= 1.3.0"
 
 end

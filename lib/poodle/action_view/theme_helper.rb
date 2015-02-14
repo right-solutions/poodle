@@ -79,7 +79,7 @@ module Poodle
       # <div class="row mb-10">
       #   <div class="fs-22 col-sm-12"><i class='fa fa-rub fa-lg mr-10'></i>Manage Projects</div>
       # </div>
-      def theme_heading(heading, icon='rub')
+      def theme_heading(heading, icon='')
         content_tag :div, class: "row mb-10" do
           content_tag :div, class: "fs-22 col-sm-12" do
             raw((icon ? theme_fa_icon(icon, 'lg') : "") + " #{heading}")

@@ -19,6 +19,14 @@ module Poodle
       main_app_url_helper?(method) or super
     end
 
+    def stylesheet_filename
+      @stylesheet_filename || "poodle/application"
+    end
+
+    def javascript_filename
+      @javascript_filename || "poodle/application"
+    end
+
    private
 
     def main_app_url_helper?(method)

@@ -4,7 +4,7 @@
     <title><%= title -%></title>
     <%= meta_tags %>
     <link rel="icon" href="/assets/favicon.ico" type="image/png">
-    <%= stylesheet_link_tag "application", :media => "all" -%>
+    <%= stylesheet_link_tag stylesheet_filename, :media => "all" -%>
     <%= csrf_meta_tags -%>
     <%= yield :javascript_header -%>
   </head>
@@ -47,7 +47,7 @@
   <%= render :partial=>"/layouts/poodle/common/overlays" -%>
 
   <%#* Loading Javascripts -%>
-  <%= javascript_include_tag "application" -%>
+  <%= javascript_include_tag javascript_filename -%>
 
   <%= yield :javascript_footer -%>
 

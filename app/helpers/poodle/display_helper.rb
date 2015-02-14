@@ -33,5 +33,9 @@ module Poodle
     def display_time(time)
       distance_of_time_in_words_to_now(time) + (time > Time.now ? " from now" : " ago")
     end
+
+    def stringify_date(date)
+      date.strftime("%A %d %b %Y")
+    end
   end
 end

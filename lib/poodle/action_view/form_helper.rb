@@ -129,7 +129,7 @@ module Poodle
             options[:html_options].merge!(style: "height: 80px;")
             text_area_tag(options[:param_name], object.send(field_name.to_s), **options[:html_options])
           when :file
-            file_field_tag(options[:param_name], object.send(field_name.to_s), **options[:html_options])
+            file_field_tag(options[:param_name], **options[:html_options])
           when :checkbox
             options[:html_options][:class] = "checkbox mt-10"
             check_box_tag(options[:param_name], field_name, object.send(field_name.to_s), **options[:html_options])
@@ -237,7 +237,7 @@ module Poodle
         end
 
         theme_form_group(options[:label], required: options[:required], error_class: error_class) do
-          form.select(options[:param_name], options_for_select(options_list, :selected => form.object.name), {:prompt=>options[:prompt]}, {:class => 'form-control'}) + error_message
+          form.select(options[:param_name], options_for_select(options_list, :selected => object.send(field_name)), {:prompt=>options[:prompt]}, {:class => 'form-control'}) + error_message
         end
       end
 

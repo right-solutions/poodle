@@ -4,7 +4,8 @@
     <title><%= title -%></title>
     <%= meta_tags %>
     <link rel="icon" href="/assets/favicon.ico" type="image/png">
-    <%= stylesheet_link_tag stylesheet_filename, :media => "all" -%>
+
+    <%= stylesheet_link_tag @stylesheet_filename, :media => "all" -%>
     <%= csrf_meta_tags -%>
     <%= yield :javascript_header -%>
   </head>
@@ -30,12 +31,15 @@
         </div>
 
         <%#* Page Content Starts here -%>
-        <div class="pt-10" style="min-height:400px;">
+        <div id="div_page_content">
           <%= yield %>
         </div>
 
         <%#* Display Footer -%>
+        <div class="cl-40"></div>
+        <div id="div_page_footer" class="row footer-with-sidebar">
         <%= render :partial=>"/layouts/poodle/application/footer" -%>
+        </div>
 
       </div>
 
@@ -47,7 +51,7 @@
   <%= render :partial=>"/layouts/poodle/common/overlays" -%>
 
   <%#* Loading Javascripts -%>
-  <%= javascript_include_tag javascript_filename -%>
+  <%= javascript_include_tag @javascript_filename -%>
 
   <%= yield :javascript_footer -%>
 

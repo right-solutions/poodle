@@ -4,6 +4,9 @@ module Poodle
   module ActionView
     describe ThemeHelper, type: :helper do
 
+      let(:user) { FactoryGirl.create(:user) }
+      let(:user_with_image) { FactoryGirl.create(:user_with_image, name: "Some Name") }
+
       describe '#theme_fa_icon' do
         it "theme_fa_icon" do
           expect(helper.theme_fa_icon("some-class")).to eq("<i class='fa fa-some-class'></i>")
@@ -48,7 +51,7 @@ module Poodle
 
       describe '#theme_heading' do
         it "theme_heading" do
-          expect(helper.theme_heading("Heading Text")).to eq("<div class=\"row mb-10\"><div class=\"fs-22 col-sm-12\"><i class='fa fa-rub fa-lg'></i> Heading Text</div></div>")
+          expect(helper.theme_heading("Heading Text")).to eq("<div class=\"row mb-10\"><div class=\"fs-22 col-sm-12\"><i class='fa fa- fa-lg'></i> Heading Text</div></div>")
           expect(helper.theme_heading("Heading Text2", icon='icon-abcd')).to eq("<div class=\"row mb-10\"><div class=\"fs-22 col-sm-12\"><i class='fa fa-icon-abcd fa-lg'></i> Heading Text2</div></div>")
         end
       end
@@ -70,16 +73,6 @@ module Poodle
 
       describe '#theme_paginate' do
         it "theme_paginate" do
-        end
-      end
-
-      describe '#theme_panel_message' do
-        it "theme_panel_message" do
-        end
-      end
-
-      describe '#theme_panel_title' do
-        it "theme_panel_title" do
         end
       end
 
@@ -108,6 +101,16 @@ module Poodle
         end
       end
 
+      describe '#theme_panel_message' do
+        it "theme_panel_message" do
+        end
+      end
+
+      describe '#theme_panel_title' do
+        it "theme_panel_title" do
+        end
+      end
+
       describe '#theme_panel_heading' do
         it "theme_panel_heading" do
         end
@@ -120,38 +123,6 @@ module Poodle
 
       describe '#theme_panel_description' do
         it "theme_panel_description" do
-        end
-      end
-
-      describe '#theme_image' do
-        it "theme_image" do
-        end
-      end
-
-      describe '#palceholdit' do
-        it "palceholdit" do
-          expect(helper.palceholdit()).to eq("http://placehold.it/60x60&text=<No Image>")
-          expect(helper.palceholdit(width: 60, height: 40, text: "Not Found")).to eq("http://placehold.it/60x40&text=Not Found")
-        end
-      end
-
-      describe '#theme_user_image' do
-        let(:user) { FactoryGirl.create(:user) }
-        let(:user_with_image) { FactoryGirl.create(:user_with_image, name: "Some Name") }
-        it "should display placeholder image for user without image" do
-          expect(helper.theme_user_image(user, "profile_picture.image_url(:thumb)")).to eq("<div><div class=\"rounded\" style=\"width:60px;height:60px;\"><img class=\"\" style=\"width:100%;height:auto;cursor:pointer;\" src=\"http://placehold.it/60x60&amp;text=&lt;No Image&gt;\" alt=\"60x60&amp;text=&lt;no image&gt;\" /></div></div>")
-        end
-
-        it "should display the profile picture user with image" do
-          # data-toggle=\"popover\" data-placement=\"bottom\" title=\"Some Name\" data-content=\"true\"
-          expect(helper.theme_user_image(user_with_image, "profile_picture.image_url(:thumb)")).to eq("<div><div class=\"rounded\" style=\"width:60px;height:60px;\"><img class=\"\" style=\"width:100%;height:auto;cursor:pointer;\" src=\"http://localhost:9001/uploads/profile_picture/image/1/thumb_test.jpg\" alt=\"Thumb test\" /></div></div>")
-        end
-
-        it "should display the profile picture with popover" do
-          expect(helper.theme_user_image(user_with_image, "profile_picture.image_url(:thumb)", popover: true)).to eq("<div><div class=\"rounded\" style=\"width:60px;height:60px;\"><img class=\"\" style=\"width:100%;height:auto;cursor:pointer;\" data-toggle=\"popover\" data-placement=\"bottom\" title=\"Some Name\" data-content=\"\" src=\"http://localhost:9001/uploads/profile_picture/image/1/thumb_test.jpg\" alt=\"Thumb test\" /></div></div>")
-
-          expect(helper.theme_user_image(user_with_image, "profile_picture.image_url(:thumb)", popover:
-            "Hello")).to eq("<div><div class=\"rounded\" style=\"width:60px;height:60px;\"><img class=\"\" style=\"width:100%;height:auto;cursor:pointer;\" data-toggle=\"popover\" data-placement=\"bottom\" title=\"Some Name\" data-content=\"Hello\" src=\"http://localhost:9001/uploads/profile_picture/image/1/thumb_test.jpg\" alt=\"Thumb test\" /></div></div>")
         end
       end
 

@@ -1,0 +1,2 @@
+require 'carrierwave'
+CarrierWave.root = ""

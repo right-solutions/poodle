@@ -1,45 +1,185 @@
 module Poodle
   module ImageHelper
-    # This method only works with carrier wave way of doing.
-    # eg: user.profile_picture.image.large.url
-    # Usage:
-    # image_url(user, "profile_picture.image.large.url")
-    # image_url(user, "profile_picture.image.large.url")
-    # image_url(user, "profile_picture.image.large.url", {width: 40, height: 10})
-    # Where as the hash contains width and height for the place holder incase if the object doesn't has the image object
-    def image_url(object, eval_url, place_holder={})
+
+    # placeholdit is a helper method used to return placechold.it urls with custom width, height and text
+    # It is quite useful for POC Applications to get started with place holder images while developing views
+    #
+    # @example Without Any Arguments
+    #
+    #   >>> placeholdit()
+    #   "http://placehold.it/60x60&text=<No Image>"
+    #
+    # @example With width, height and custom text
+    #
+    #   >>> placeholdit(width: 120, height: 80, text: "User")
+    #   "http://placehold.it/120x80&text=User"
+    def placeholdit(**options)
+      options.reverse_merge!( width: 60, height:  60, text: "<No Image>" )
+      "http://placehold.it/#{options[:width]}x#{options[:height]}&text=#{options[:text]}"
+    end
+
+    # image_url is a helper method which can be used along with carrier_wave gem
+    # Suppose, you have an object 'user' which has a profile_picture
+    # image_url will return you placehold.it image if profile_picture is not set else it will return you the carrier wave url
+    #
+    # @example Basic Usage without Image
+    #
+    #   >>> image_url(user, "profile_picture.image.thumb.url")
+    #   "http://placehold.it/60x60&text=<No Image>"
+    #
+    # @example Basic Usage with Image
+    #
+    #   >>> image_url(user_with_image, "profile_picture.image.thumb.url")
+    #   "uploads/profile_picture/image/1/thumb_test.jpg"
+    #
+    # @example Advance Usage with Placehold.it Arguments
+    #
+    #   >>> image_url(user, "profile_picture.image.large.url", {width: 40, height: 10, text: "Pic"})
+    #   "http://placehold.it/40x10&text=Pic"
+    def image_url(object, method_name, **options)
       begin
-        url = object.send :eval, eval_url
+        url = object.send :eval, method_name
         raise if url.blank?
       rescue
-        url = place_holder[:url] ? place_holder[:url] : "http://placehold.it/#{place_holder[:width]}x#{place_holder[:height]}&text=#{place_holder[:text]}"
+        url = placeholdit(**options)
       end
       return url
     end
 
     # This method will render the image with required width and height.
     # The image url will be set to the placeholder url if the object doesn't respond to the image method
-    # Usage:
-    # display_image(client, "logo.image.url")
-    # display_image(client, "logo.image.url",
-    #                       width: "100%", height:"100%")
-    # display_image(client, "logo.image.url",
-    #                       width: "100%", height:"100%",
-    #                       place_holder: {width: 100, height: 50, text: "<No Image>"})
-    def display_image(object, eval_url, hsh={})
-      hsh[:width] = "100%" unless hsh[:width]
-      hsh[:height] = "auto" unless hsh[:height]
+    #
+    # @example Basic Usage without Image
+    #
+    #   >>> display_image(user, "profile_picture.image.thumb.url")
+    #   "<img class=\"\" width=\"100%\" height=\"auto\" src=\"http://placehold.it/100x60&amp;text=&lt;No Image&gt;\" alt=\"100x60&amp;text=&lt;no image&gt;\" />"
+    #
+    # @example Basic Usage with image
+    #
+    #   >>> display_image(user, "profile_picture.image.thumb.url", width: "100%", height:"100%")
+    #   "<img class=\"\" width=\"100%\" height=\"100%\" src=\"http://placehold.it/100x60&amp;text=&lt;No Image&gt;\" alt=\"100x60&amp;text=&lt;no image&gt;\" />"
+    #
+    # @example Advanced Usage with width & height
+    #
+    #   >>> display_image(user_with_image, 'profile_picture.image.large.url', width: "30px", height: "50px", place_holder: {width: 100, height: 50, text: "SOME TEXT"})
+    #   "<img class=\"\" width=\"30px\" height=\"50px\" src=\"/spec/dummy/uploads/image/profile_picture/1/large_test.jpg\" alt=\"Large test\" />"
+    def display_image(object, method_name, **options)
+      options.reverse_merge!(
+        width: "100%",
+        height: "auto",
+        place_holder: {},
+        class: object.persisted? ? "#{object.id}-poodle-thumb-image" : ""
+      )
 
-      ph = hsh.has_key?(:place_holder) ? hsh[:place_holder] : {}
-      ph[:width] = ph.has_key?(:width) ? ph[:width] : DEFAULT_PLACE_HOLDER_WIDTH
-      ph[:height] = ph.has_key?(:height) ? ph[:height] : DEFAULT_PLACE_HOLDER_HEIGHT
-      ph[:text] = ph.has_key?(:text) ? ph[:text] : DEFAULT_PLACE_HOLDER_TEXT
-      hsh[:place_holder] = ph
+      img_url = image_url(object, method_name, **options[:place_holder])
+      return image_tag(img_url, class: options[:class], width: options[:width], height: options[:height])
+    end
 
-      hsh[:style] = "" unless hsh[:style]
-      hsh[:class] = "" unless hsh[:class]
-      img_url = image_url(object, eval_url, ph)
-      return image_tag img_url, class: hsh[:class], style: "width:#{hsh[:width]};height:#{hsh[:height]};#{hsh[:style]}"
+    # @example Basic Usage
+    #
+    #   >>> display_user_image(@user, 'profile_picture.image.thumb.url')
+    #   "<div><div class="rounded" style="width:60px;height:60px;"><img alt="Thumb krishnan" class="" src="/uploads/image/profile_picture/39/thumb_krishnan.jpg" style="width:100%;height:auto;cursor:default;"></div></div>"
+    #
+    # @example Advanced Usage with
+    #
+    #   >>> display_user_image(@user, 'profile_picture.image.thumb.url', width: 100, height: 100)
+    #   "<div><div class="rounded" style="width:100px;height:60px;"><img alt="Thumb krishnan" class="" src="/uploads/image/profile_picture/39/thumb_krishnan.jpg" style="width:100%;height:auto;cursor:default;"></div></div>"
+    def display_user_image(user, method_name, **options)
+
+      url_domain = defined?(QAuthRubyClient) ? QAuthRubyClient.configuration.q_auth_url : ""
+
+      options.reverse_merge!(
+        width: "60px",
+        height: "auto",
+        url_domain: url_domain,
+        place_holder: {},
+        html_options: {}
+      )
+
+      options[:html_options].reverse_merge!(
+        style: "width:100%;height:auto;cursor:#{options.has_key?(:popover) ? "pointer" : "default"};",
+        class: user.persisted? ? "#{user.id}-poodle-thumb-image" : ""
+        )
+
+      options[:html_options].reverse_merge!(
+        "data-toggle" => "popover",
+        "data-placement" => "bottom",
+        "title" => user.name,
+        "data-content" => options[:popover] === true ? "" : options[:popover].to_s
+      ) if options[:popover]
+
+      begin
+        url = options[:url_domain] + user.send(:eval, method_name)
+      rescue
+        url = placeholdit(**options[:place_holder])
+      end
+
+      content_tag(:div) do
+        content_tag(:div, class: "rounded", style: "width:#{options[:width]};height:#{options[:height]}") do
+          image_tag(url, options[:html_options])
+        end
+      end
+    end
+
+    # Displays the image with a edit button below it
+    # @example Basic Usage
+    #   >>> edit_image(@project, "logo.image.url", edit_url, width: "100px", height: "auto")
+    #   ""
+    def edit_image(object, method_name, edit_url, **options)
+      options.reverse_merge!(
+        remote: true,
+        text: "Change Image",
+        icon: "photo",
+        classes: "btn btn-default btn-xs mt-10"
+      )
+      img_tag = display_image(object, method_name, **options)
+      btn_display = raw(theme_fa_icon(options[:icon]) + theme_button_text(options[:text]))
+      link_to(img_tag, edit_url, :remote => options[:remote]) +
+      link_to(btn_display, edit_url, :class=>options[:classes], :remote=>options[:remote])
+    end
+
+    # Displays the user image in a rounded frame with a edit button below it
+    # @example Basic Usage
+    #   >>> edit_user_image(@project, "logo.image.url", edit_url, width: "100px", height: "auto")
+    #   ""
+    def edit_user_image(object, method_name, edit_url, **options)
+      options.reverse_merge!(
+        remote: true,
+        text: "Change Image",
+        icon: "photo",
+        classes: "btn btn-default btn-xs mt-10"
+      )
+      img_tag = display_user_image(object, method_name, **options)
+      btn_display = raw(theme_fa_icon(options[:icon]) + theme_button_text(options[:text]))
+      link_to(img_tag, edit_url, :remote => options[:remote]) +
+      link_to(btn_display, edit_url, :class=>options[:classes], :remote=>options[:remote])
+    end
+
+    # Returns new photo url or edit existing photo url based on object is associated with photo or not
+    # @example Basic Usage - User without Image
+    #   >>> upload_image_link(@user, :profile_picture, :admin)
+    #   "/admin/images/new"
+    #
+    # @example Basic Usage - User with Iamge
+    #
+    #   >>> upload_image_link(@user_with_image, :profile_picture, :admin)
+    #   "/admin/images/1/edit"
+    #
+    # @example Basic Usage - Custom Scope
+    #
+    #   >>> upload_image_link(@project, :profile_picture, :client)
+    #   "/client/images/new"
+    #   >>> upload_image_link(@project_with_image, :profile_picture, :client)
+    #   "/client/images/1/edit"
+    def upload_image_link(object, assoc_name=:photo, scope=:admin)
+      photo_object = nil
+      photo_object =  object.send(assoc_name) if object.respond_to?(assoc_name)
+      if photo_object.present? && photo_object.persisted?
+        url_for([:edit, scope, :image, id: photo_object.id, imageable_id: object.id, imageable_type: object.class.to_s, image_type: photo_object.class.name])
+      else
+        photo_object = object.send("build_#{assoc_name}")
+        url_for([:new, scope, :image, imageable_id: object.id, imageable_type: object.class.to_s, image_type: photo_object.class.name])
+      end
     end
   end
 end

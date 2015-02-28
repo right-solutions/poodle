@@ -13,12 +13,15 @@
 
 ActiveRecord::Schema.define(version: 20140402113213) do
 
-  create_table "profile_pictures", force: :cascade do |t|
+  create_table "images", force: :cascade do |t|
     t.string   "image"
-    t.integer  "user_id"
+    t.integer  "imageable_id"
+    t.string   "imageable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "images", ["imageable_id", "imageable_type"], name: "index_images_on_imageable_id_and_imageable_type"
 
   create_table "users", force: :cascade do |t|
     t.string   "name",       limit: 255

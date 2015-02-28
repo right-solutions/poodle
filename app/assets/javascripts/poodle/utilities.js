@@ -1,5 +1,23 @@
 // Write down only those functions which are being used by application.init or any part of the application like ajax event handlers.
 
+function cropImage(formId, aspectRatio, minHeight, minWidth) {
+  if(aspectRatio == undefined){var aspectRatio=1}
+  if(minHeight == undefined){var minHeight=116}
+  if(minWidth == undefined){var minWidth=116}
+  $("#"+formId+ " img").cropper({
+    aspectRatio: aspectRatio,
+    minHeight: minHeight,
+    minWidth: minWidth,
+    data: {},
+    done: function(data) {
+      $("#"+formId+" .crop_x").val(data.x);
+      $("#"+formId+" .crop_y").val(data.y);
+      $("#"+formId+" .crop_w").val(data.width);
+      $("#"+formId+" .crop_h").val(data.height);
+    }
+  });
+}
+
 // loadANewPage will accept a url and will load a new page
 // It can be tuned to show a lightbox showing a loading, please wait message.
 function loadANewPage(url){
@@ -13,19 +31,17 @@ function sendAjaxRequest(url, mType){
 	jQuery.ajax({type: methodType, dataType:"script", url:url});
 }
 
-// Call this function by passing  model Id, heading and a bodyContent.
-// it will pop up bootstrap 3 modal.
 var messageModalId = "div_modal_message";
 var genericModalId = "div_modal_generic";
+// Call this function by passing  model Id, heading and a bodyContent.
+// it will pop up bootstrap 3 modal.
 function showModal(heading, bodyContent, modalId){
   if(modalId==null){
     var modalId = genericModalId;
   }
-	//$('#' + modalId + ' .modal-body').html("<p>"+ message +"</p>");
-	$('#' + modalId + ' .modal-header h4.modal-title').text(heading);
-	$('#' + modalId + ' div.modal-body-main').html(bodyContent);
-	$('#' + modalId).modal('show');
-  //$('#' + modalId + ' .modal-footer button.btn-primary').button('reset');
+  $('#' + modalId + ' .modal-header h4.modal-title').text(heading);
+  $('#' + modalId + ' div.modal-body-main').html(bodyContent);
+  $('#' + modalId).modal('show');
 }
 
 // Call this function by passing  heading and a message.

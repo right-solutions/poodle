@@ -6,7 +6,7 @@ FactoryGirl.define do
 
   factory :user_with_image, parent: :user do
     after(:create) do |user|
-      FactoryGirl.create(:profile_picture, user: user)
+      FactoryGirl.create(:profile_picture, imageable: user)
     end
   end
 

@@ -8,3 +8,7 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 *.gem
 spec/dummy/log/test.log
+.yardoc/*
+
+spec/dummy/log/*.log
+spec/dummy/uploads/*

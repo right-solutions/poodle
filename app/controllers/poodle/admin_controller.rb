@@ -126,31 +126,5 @@ module Poodle
       render_or_redirect(obj.errors.any?, url, action_name)
     end
 
-    def render_or_redirect(error, redirect_url, action)
-      respond_to do |format|
-        format.html {
-          if error
-            render action: action
-          else
-            redirect_to redirect_url, notice: @options[:message]
-          end
-        }
-        format.js {}
-      end
-    end
-
-    def render_list
-      respond_to do |format|
-        format.html { get_collections and render :index }
-        format.js {}
-      end
-    end
-
-    def render_show
-      respond_to do |format|
-        format.js { render action: :show }
-      end
-    end
-
   end
 end

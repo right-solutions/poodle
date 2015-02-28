@@ -1,5 +1,22 @@
 /* Styles for footer */
-.footer {margin:100px 0px 0px 0px;color: #4b4b4b;height:50px;text-align:center;}
+.footer {
+  color: #4b4b4b;
+  text-align: center;
+  bottom: 2%;
+  display: block;
+  width: 100%;
+  height: auto;
+  position: absolute;
+}
+
+.footer-with-sidebar {
+  padding: 20px 0px;
+  color: #4b4b4b;
+  position: fixed;
+  text-align: center;
+  width: 70%;
+  bottom: 10px;
+}
 
 /* Styles for Sidebar and Main Content */
 

@@ -12,6 +12,7 @@
  *= require poodle/bootstrap-theme
  *= require poodle/font-awesome
  *= require poodle/poodle-theme
+ *= require poodle/cropper
  *= require handycss.css
  *= require_self
 

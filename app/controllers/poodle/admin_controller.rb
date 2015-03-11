@@ -65,7 +65,7 @@ module Poodle
     end
 
     def default_collection_name
-       params[:controller].gsub("admin/", "").to_s
+      params[:controller].split("/").last
     end
 
     def default_item_name
@@ -118,11 +118,15 @@ module Poodle
       return true
     end
 
+    def resource_url(obj)
+      url_for([:admin, obj])
+    end
+
     def save_resource(obj)
       obj.save
       set_flash_message(@options[:messages][:save], :success) if obj.errors.blank?
       action_name = params[:action].to_s == "create" ? "new" : "edit"
-      url = obj.persisted? ? url_for([:admin, obj]) : nil
+      url = obj.persisted? ? resource_url(obj) : nil
       render_or_redirect(obj.errors.any?, url, action_name)
     end
 

@@ -106,7 +106,10 @@ module Poodle
         end
       end
 
-      def theme_drop_down(collection, method_name)
+      def theme_drop_down(collection, method_name, **options)
+        options.reverse_merge!(
+          scope: :admin
+        )
         content_tag(:div, class: "btn-group mt-10 mb-10", style: "width:100%;") do
           button_tag(type: 'button', :class => "btn btn-default btn-block dropdown-toggle", "data-toggle" => "dropdown") do
             raw("Choose a Project" + content_tag(:span, "", class: "caret"))
@@ -115,7 +118,8 @@ module Poodle
             li_array = []
             collection.each do |item|
               li_array << content_tag(:li) do
-                link_to item.send(method_name), main_app.url_for([:admin, item]), :remote => true
+                url = main_app.url_for([options[:scope], item])
+                link_to item.send(method_name), url, :remote => true
               end
             end
             raw(li_array.join(" ")) +
@@ -222,9 +226,9 @@ module Poodle
         when "edit"
           render partial: options[:edit_partial]
         when "index"
-          collection.empty? ? (theme_panel_message(I18n.translate("forms.no_results_found"))) : render(partial: options[:index_partial])
+          collection.empty? ? (theme_panel_message(I18n.translate("forms.no_results"))) : render(partial: options[:index_partial])
         else
-          theme_panel_message(I18n.translate("forms.no_results_found"))
+          theme_panel_message(I18n.translate("forms.no_results"))
         end
       end
 

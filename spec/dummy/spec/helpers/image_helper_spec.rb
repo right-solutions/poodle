@@ -7,6 +7,14 @@ module Poodle
       let(:user) { FactoryGirl.create(:user) }
       let(:user_with_image) { FactoryGirl.create(:user_with_image, name: "Some Name") }
 
+      describe '#namify' do
+        it "should return the first letters of the names" do
+          expect(helper.namify("Ravi Shankar")).to eq("RS")
+          expect(helper.namify("Krishnaprasad")).to eq("K")
+          expect(helper.namify("Mohandas Karam Chand Gandhi")).to eq("MK")
+        end
+      end
+
       describe '#placeholdit' do
         it "should return placeholdit url" do
           expect(helper.placeholdit()).to eq("http://placehold.it/60x60&text=<No Image>")

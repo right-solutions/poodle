@@ -1,6 +1,15 @@
 module Poodle
   module ImageHelper
 
+    # namify returns the first letters of first name and last name
+    # @examples Basic usage
+    #
+    #   >>> namify("Krishnaprasad Varma")
+    #   => "KV"
+    def namify(name)
+      name.split(" ").map{|x| x.first.capitalize}[0..1].join("")
+    end
+
     # placeholdit is a helper method used to return placechold.it urls with custom width, height and text
     # It is quite useful for POC Applications to get started with place holder images while developing views
     #
@@ -82,7 +91,7 @@ module Poodle
     #
     # @example Advanced Usage with
     #
-    #   >>> display_user_image(@user, 'profile_picture.image.thumb.url', width: 100, height: 100)
+    #   >>> display_user_image(@user, 'profile_picture.image.thumb.url', width: 100px, height: 100px)
     #   "<div><div class="rounded" style="width:100px;height:60px;"><img alt="Thumb krishnan" class="" src="/uploads/image/profile_picture/39/thumb_krishnan.jpg" style="width:100%;height:auto;cursor:default;"></div></div>"
     def display_user_image(user, method_name, **options)
 
@@ -99,7 +108,11 @@ module Poodle
       options[:html_options].reverse_merge!(
         style: "width:100%;height:auto;cursor:#{options.has_key?(:popover) ? "pointer" : "default"};",
         class: user.persisted? ? "#{user.id}-poodle-thumb-image" : ""
-        )
+      )
+
+      if user.respond_to?(:name)
+        options[:place_holder].reverse_merge!(text: namify(user.name), width: "120px")
+      end
 
       options[:html_options].reverse_merge!(
         "data-toggle" => "popover",

@@ -14,33 +14,33 @@ module Poodle
 
     def show
       obj = @options[:class].find(params[:id])
-      instance_variable_set("@#{@options[:collection_name].to_s.singularize}", obj)
+      instance_variable_set("@#{@options[:item_name]}", obj)
       render_list
     end
 
     def new
       obj = @options[:class].new
-      instance_variable_set("@#{@options[:collection_name].to_s.singularize}", obj)
+      instance_variable_set("@#{@options[:item_name]}", obj)
       render_list
     end
 
     def edit
       obj = @options[:class].find(params[:id])
-      instance_variable_set("@#{@options[:collection_name].to_s.singularize}", obj)
+      instance_variable_set("@#{@options[:item_name]}", obj)
       render_list
     end
 
     def create
       obj = @options[:class].new
       obj.assign_attributes(permitted_params)
-      instance_variable_set("@#{@options[:collection_name].to_s.singularize}", obj)
+      instance_variable_set("@#{@options[:item_name]}", obj)
       save_resource(obj)
     end
 
     def update
       obj = @options[:class].find(params[:id])
       obj.assign_attributes(permitted_params)
-      instance_variable_set("@#{@options[:collection_name].to_s.singularize}", obj)
+      instance_variable_set("@#{@options[:item_name]}", obj)
       save_resource(obj)
     end
 
@@ -69,7 +69,7 @@ module Poodle
     end
 
     def default_item_name
-      default_collection_name.singularize.gsub("_", " ").titleize
+      default_collection_name.singularize.gsub("_", " ")
     end
 
     def default_class
@@ -82,12 +82,12 @@ module Poodle
         item_name: default_item_name,
         class: default_class,
         messages: {
-          add: I18n.translate("forms.add", item: default_item_name),
-          create: I18n.translate("forms.create", item: default_item_name),
-          update: I18n.translate("forms.update", item: default_item_name),
-          save: I18n.translate("forms.save", item: default_item_name),
-          remove: I18n.translate("forms.remove", item: default_item_name),
-          delete: I18n.translate("forms.delete",item:  default_item_name)
+          add: I18n.translate("forms.add", item: default_item_name.titleize),
+          create: I18n.translate("forms.create", item: default_item_name.titleize),
+          update: I18n.translate("forms.update", item: default_item_name.titleize),
+          save: I18n.translate("forms.save", item: default_item_name.titleize),
+          remove: I18n.translate("forms.remove", item: default_item_name.titleize),
+          delete: I18n.translate("forms.delete",item:  default_item_name.titleize)
         }
       }
     end
@@ -112,8 +112,8 @@ module Poodle
       prepare_query
       objects = @relation.order("created_at desc").page(@current_page).per(@per_page)
       instance_variable_set("@#{@options[:collection_name]}", objects)
-      unless instance_variable_get("@#{@options[:collection_name].to_s.singularize}")
-        instance_variable_set("@#{@options[:collection_name].to_s.singularize}", objects.first)
+      unless instance_variable_get("@#{@options[:item_name]}")
+        instance_variable_set("@#{@options[:item_name]}", objects.first)
       end
       return true
     end

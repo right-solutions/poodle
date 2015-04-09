@@ -29,8 +29,8 @@ module Poodle
         end
 
         it "should return careerwave url for user with profile picture" do
-          expect(helper.image_url(user_with_image, "profile_picture.image.large.url")).to eq("/spec/dummy/uploads/image/profile_picture/1/large_test.jpg")
-          expect(helper.image_url(user_with_image, "profile_picture.image.thumb.url")).to eq("/spec/dummy/uploads/image/profile_picture/1/thumb_test.jpg")
+          expect(helper.image_url(user_with_image, "profile_picture.image.large.url")).to eq("/public/uploads/image/profile_picture/1/large_test.jpg")
+          expect(helper.image_url(user_with_image, "profile_picture.image.thumb.url")).to eq("/public/uploads/image/profile_picture/1/thumb_test.jpg")
         end
       end
 
@@ -56,7 +56,7 @@ module Poodle
         it "should display placeholder image for user without image" do
           exptected_result = content_tag(:div) do
             content_tag(:div, class: "rounded", style: "width:60px;height:auto") do
-              image_tag(placeholdit(), {style: "width:100%;height:auto;cursor:default;", class: "#{user.id}-poodle-thumb-image"})
+              image_tag(placeholdit(text: namify(user.name)), {style: "width:100%;height:auto;cursor:default;", class: "#{user.id}-poodle-thumb-image"})
             end
           end
           expect(helper.display_user_image(user, "profile_picture.image.thumb.url")).to eq(exptected_result)

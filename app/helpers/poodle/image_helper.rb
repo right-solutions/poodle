@@ -111,7 +111,7 @@ module Poodle
       )
 
       if user.respond_to?(:name)
-        options[:place_holder].reverse_merge!(text: namify(user.name), width: "120px")
+        options[:place_holder].reverse_merge!(text: namify(user.name))
       end
 
       options[:html_options].reverse_merge!(

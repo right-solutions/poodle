@@ -3,7 +3,7 @@
   <head>
     <title><%= title -%></title>
     <%= meta_tags %>
-    <link rel="icon" href="/assets/favicon.ico" type="image/png">
+    <%= favicon_link_tag %>
 
     <%= stylesheet_link_tag @stylesheet_filename, :media => "all" -%>
     <%= csrf_meta_tags -%>

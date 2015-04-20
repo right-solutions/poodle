@@ -88,12 +88,12 @@ module Poodle
       end
 
       # theme_search_form is a helper to create a form to filter the results by entering a search query
-      def theme_search_form(cls, url, method=:get, remote=true, text="Search!")
+      def theme_search_form(cls, url, method=:get, remote=true, text="Search!", placeholder="Search ...")
         form_for cls.new, :url => url,
               :method => method, :remote=>remote,
               :html=>{:class=>"pull-right", :style=>"margin-bottom:0px;"} do |f|
           content_tag :div, class: "input-group" do
-            text_field_tag('query','', :class => 'form-control', :placeholder => 'Search ...') +
+            text_field_tag('query','', :class => 'form-control', :placeholder => placeholder) +
             content_tag(:span, class: "input-group-btn") do
               button_tag(type: 'submit', class: "btn btn-default") do
                 raw(theme_fa_icon('search') +
@@ -186,8 +186,8 @@ module Poodle
       # is equivalent to:
       # ---------------------------
       #  <%= link_to project.name, admin_project_path(project), :remote=>true, :class=>"text-color-blue fs-16" %>
-      def theme_item_title(title, url, classes = "text-color-blue fs-16")
-        link_to(title, url, :remote=>true, :class=>classes)
+      def theme_item_title(title, url, classes = "text-color-blue fs-16", remote=true)
+        link_to(title, url, :remote=>remote, :class=>classes)
       end
 
       # Example

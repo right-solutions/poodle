@@ -12,3 +12,7 @@ spec/dummy/log/test.log
 
 spec/dummy/log/*.log
 spec/dummy/uploads/*
+public/uploads/image/profile_picture/1/large_test.jpg
+public/uploads/image/profile_picture/1/medium_test.jpg
+public/uploads/image/profile_picture/1/test.jpg
+public/uploads/image/profile_picture/1/thumb_test.jpg

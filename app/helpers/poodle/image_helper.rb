@@ -122,7 +122,12 @@ module Poodle
       ) if options[:popover]
 
       begin
-        url = options[:url_domain] + user.send(:eval, method_name)
+        image_path = user.send(:eval, method_name)
+        if image_path.starts_with?(:http)
+          url = image_path
+        else
+          url = options[:url_domain] + image_path
+        end
       rescue
         url = placeholdit(**options[:place_holder])
       end

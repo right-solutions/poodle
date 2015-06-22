@@ -52,8 +52,8 @@ module PoodleValidators
 
   # format can be either :us or :indian
   def validate_phone(attribute, **options)
-    options.reverse_merge!(country: :india)
-    if options[:country] == :us
+    options.reverse_merge!(phone_format: :india)
+    if options[:phone_format] == :us
       reg_exp = /\A[0-9]{3}[-][0-9]{3}[-][0-9]{4}\z/
       length = 12
     else

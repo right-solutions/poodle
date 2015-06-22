@@ -1,6 +1,7 @@
 module PoodleValidators
 
   def generate_validation_options(attribute, options)
+    {a: 1}
     reg_exp = /\A[a-zA-Z1-9\-\ \(\)\.+]*\z/i
     options.reverse_merge!(
       presence: true,
@@ -37,7 +38,7 @@ module PoodleValidators
 
   def validate_username(attribute, **options)
     reg_exp = /\A[a-zA-Z0-9\_]*\z/
-    options.merge!(mandatory: true, max_length: 3, max_length: 128, format: reg_exp, :uniqueness => {:case_sensitive => false})
+    options.merge!(mandatory: true, min_length: 3, max_length: 128, format: reg_exp, :uniqueness => {:case_sensitive => false})
     voptions = generate_validation_options(attribute, options)
     validates attribute, **voptions
   end
@@ -47,6 +48,21 @@ module PoodleValidators
     options.merge!(mandatory: true, format: reg_exp, :uniqueness => {:case_sensitive => false})
     voptions = generate_validation_options(attribute, options)
     validates attribute, **voptions
+  end
+
+  # format can be either :us or :indian
+  def validate_phone(attribute, **options)
+    options.reverse_merge!(phone_format: :indian)
+    if options[:phone_format] == :us
+      reg_exp = /\A[0-9]{3}[-][0-9]{3}[-][0-9]{4}\z/
+      length = 12
+    else
+      reg_exp = /\A[0-9]{10}\z/
+      length = 10
+    end
+    options.merge!(format: reg_exp, min_length: length, max_length: length)
+    options.reverse_merge!(numericality: true, mandatory: true, uniqueness: true)
+    validates attribute, **options
   end
 
   def validate_password(attribute, **options)
